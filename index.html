@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>日報シュシュ | 毎日を整える日本語日報アプリ</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:;">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="gate" id="gate">
+      <div class="gate-card">
+        <h2>アクセス保護</h2>
+        <p class="subtext">初回は店長用パスコードを設定してください（4〜12桁）。</p>
+        <form id="gateForm">
+          <label>
+            パスコード
+            <input type="password" id="gateCode" inputmode="numeric" minlength="4" maxlength="12" required>
+          </label>
+          <button type="submit" class="primary-button" id="gateSubmit">ロック解除</button>
+        </form>
+        <p class="note">※パスコードはこの端末内にのみ保存されます。</p>
+      </div>
+    </div>
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark">✿</span>
+        <div>
+          <p class="brand-name">日報シュシュ</p>
+          <p class="brand-tagline">店舗運営まで支える日本語日報アプリ</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="ghost-button" type="button">テンプレート</button>
+        <button class="primary-button" type="button">日報を送信</button>
+        <button class="ghost-button" type="button" id="lockButton">ロック</button>
+      </div>
+    </header>
+
+    <main class="app-grid">
+      <section class="card hero">
+        <div>
+          <p class="eyebrow">今日のダッシュボード</p>
+          <h1>店舗の「今日」を一枚で把握</h1>
+          <p class="body">
+            現場の売上・来客・課題をまとめて整理。入力と同時に自動集計し、
+            明日の打ち手まで一気に見える化します。
+          </p>
+          <div class="hero-tags">
+            <span>自動要約</span>
+            <span>毎日リマインド</span>
+            <span>店舗運用に最適</span>
+          </div>
+        </div>
+        <div class="hero-status">
+          <div>
+            <p class="label">入力ステータス</p>
+            <p class="value">72%</p>
+          </div>
+          <div>
+            <p class="label">現在の集中度</p>
+            <p class="value">高</p>
+          </div>
+          <div>
+            <p class="label">今日の総売上</p>
+            <p class="value">¥0</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card quick-stats">
+        <h2>今日のログ</h2>
+        <div class="stats-grid">
+          <div>
+            <p class="stat-label">完了タスク</p>
+            <p class="stat-value">6</p>
+          </div>
+          <div>
+            <p class="stat-label">連絡/相談</p>
+            <p class="stat-value">3</p>
+          </div>
+          <div>
+            <p class="stat-label">来客数</p>
+            <p class="stat-value" id="visitorTotal">0</p>
+          </div>
+          <div>
+            <p class="stat-label">客単価</p>
+            <p class="stat-value" id="averageSpend">¥0</p>
+          </div>
+        </div>
+        <div class="progress">
+          <div class="progress-bar"></div>
+        </div>
+        <p class="progress-text">目標入力率まであと28%</p>
+      </section>
+
+      <section class="card kpi">
+        <h2>店舗KPI入力</h2>
+        <p class="subtext">数字を入れるだけで日報サマリーが完成します。</p>
+        <div class="kpi-grid">
+          <label>
+            総売上（円）
+            <input type="number" id="salesInput" placeholder="例：120000" min="0" inputmode="numeric">
+          </label>
+          <label>
+            来客数（人）
+            <input type="number" id="visitorsInput" placeholder="例：85" min="0" inputmode="numeric">
+          </label>
+          <label>
+            ピーク時間帯
+            <input type="text" id="peakInput" placeholder="例：12:00-14:00">
+          </label>
+          <label>
+            目標達成率（%）
+            <input type="number" id="targetRateInput" placeholder="例：92" min="0" max="200" inputmode="numeric">
+          </label>
+        </div>
+      </section>
+
+      <section class="card report-form" id="report">
+        <div class="card-header">
+          <h2>日報入力</h2>
+          <p class="subtext">自分の言葉で入力すると自動で整理されます。</p>
+        </div>
+        <form id="reportForm">
+          <label class="privacy-toggle">
+            <input type="checkbox" id="saveToggle" checked>
+            この端末にのみ保存（クラウド送信なし）
+          </label>
+          <label>
+            重要トピック
+            <input type="text" name="highlights" placeholder="例：新メニューが好評、在庫が残り少ない">
+          </label>
+          <label>
+            今日の成果
+            <textarea name="achievements" placeholder="例：新規LP公開、仕様書レビュー完了" required></textarea>
+          </label>
+          <label>
+            課題・相談事項
+            <textarea name="issues" placeholder="例：APIレスポンス遅延、QAからの質問対応"></textarea>
+          </label>
+          <label>
+            明日の予定
+            <textarea name="plans" placeholder="例：ABテスト分析、資料作成"></textarea>
+          </label>
+          <label>
+            在庫・設備のメモ
+            <textarea name="inventory" placeholder="例：紙袋残りわずか、エアコン点検予定"></textarea>
+          </label>
+          <div class="form-actions">
+            <button type="button" class="ghost-button" id="resetButton">クリア</button>
+            <button type="button" class="ghost-button" id="exportButton">レポートをダウンロード</button>
+            <button type="submit" class="primary-button">日報を保存</button>
+          </div>
+        </form>
+        <p class="note">※機密情報は入力しないでください。入力内容はこのブラウザ内にのみ保存されます。</p>
+      </section>
+
+      <section class="card summary">
+        <h2>本日のサマリー</h2>
+        <p class="subtext">入力内容から自動生成される共有用サマリーです。</p>
+        <div class="summary-grid">
+          <div>
+            <p class="summary-label">総売上</p>
+            <p class="summary-value" id="salesTotal">¥0</p>
+          </div>
+          <div>
+            <p class="summary-label">来客数</p>
+            <p class="summary-value" id="visitorsTotal">0</p>
+          </div>
+          <div>
+            <p class="summary-label">客単価</p>
+            <p class="summary-value" id="avgSpendTotal">¥0</p>
+          </div>
+          <div>
+            <p class="summary-label">目標達成率</p>
+            <p class="summary-value" id="targetRateTotal">--</p>
+          </div>
+        </div>
+        <div class="summary-box">
+          <p id="summaryText">KPIを入力するとサマリーが生成されます。</p>
+        </div>
+      </section>
+
+      <section class="card insight">
+        <h2>AIインサイト</h2>
+        <ul>
+          <li>成果が明確に整理されています。次は「数値」を入れるとさらに評価が上がります。</li>
+          <li>課題は「対応予定」をセットで書くと共有がスムーズです。</li>
+          <li>ピーク時間帯と在庫状況は経営判断に直結します。</li>
+        </ul>
+        <div class="insight-footer">
+          <button class="ghost-button">週次レポートを見る</button>
+        </div>
+      </section>
+
+      <section class="card timeline">
+        <h2>今週のタイムライン</h2>
+        <div class="timeline-list">
+          <article>
+            <p class="timeline-date">火</p>
+            <p class="timeline-title">新規施策の方向性確定</p>
+            <p class="timeline-desc">営業チームと打ち合わせ、実装計画を共有。</p>
+          </article>
+          <article>
+            <p class="timeline-date">水</p>
+            <p class="timeline-title">プロトタイプレビュー</p>
+            <p class="timeline-desc">UI改善点を整理しタスク化。</p>
+          </article>
+          <article>
+            <p class="timeline-date">木</p>
+            <p class="timeline-title">リリース前チェック</p>
+            <p class="timeline-desc">QA指摘をまとめ、対応優先度を決定。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="card footer-card">
+        <div>
+          <h2>通知設定</h2>
+          <p class="subtext">毎日18:00に入力リマインドを送ります。</p>
+        </div>
+        <div class="toggle">
+          <span>通知オン</span>
+          <button class="toggle-button" aria-pressed="true"></button>
+        </div>
+      </section>
+
+      <section class="card trust">
+        <h2>公開利用のための安全設計</h2>
+        <div class="trust-grid">
+          <div>
+            <p class="trust-title">ローカル保存</p>
+            <p class="trust-desc">データはこの端末のブラウザにのみ保存されます。</p>
+          </div>
+          <div>
+            <p class="trust-title">外部送信なし</p>
+            <p class="trust-desc">サーバーや第三者への送信は行いません。</p>
+          </div>
+          <div>
+            <p class="trust-title">安全な共有</p>
+            <p class="trust-desc">公開前に入力内容をクリアできる設計です。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
